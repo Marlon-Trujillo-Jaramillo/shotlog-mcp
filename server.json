@@ -1,0 +1,30 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.Marlon-Trujillo-Jaramillo/shotlog-mcp",
+  "title": "shotlog",
+  "description": "Capture macOS windows into a numbered, captioned screenshot log and export it as a report.",
+  "repository": {
+    "url": "https://github.com/Marlon-Trujillo-Jaramillo/shotlog-mcp",
+    "source": "github"
+  },
+  "version": "0.1.0",
+  "packages": [
+    {
+      "registryType": "pypi",
+      "identifier": "shotlog-mcp",
+      "version": "0.1.0",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "SHOTLOG_DIR",
+          "description": "Folder for screenshots, manifest.json and report.md (default: ~/shotlog)",
+          "isRequired": false,
+          "format": "string",
+          "isSecret": false
+        }
+      ]
+    }
+  ]
+}

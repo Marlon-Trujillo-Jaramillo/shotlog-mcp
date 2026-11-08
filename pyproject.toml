@@ -1,0 +1,32 @@
+[project]
+name = "shotlog-mcp"
+version = "0.1.0"
+description = "MCP server that captures macOS windows into a numbered, captioned evidence log for lab reports, QA and docs."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Marlon Trujillo Jaramillo" }]
+requires-python = ">=3.11"
+keywords = ["mcp", "model-context-protocol", "screenshot", "macos", "claude", "documentation", "qa"]
+classifiers = [
+  "Operating System :: MacOS",
+  "Programming Language :: Python :: 3",
+  "Topic :: Multimedia :: Graphics :: Capture :: Screen Capture",
+]
+dependencies = [
+  "mcp>=1.2,<2",
+  "pyobjc-framework-Quartz; sys_platform == 'darwin'",
+]
+
+[project.scripts]
+shotlog-mcp = "shotlog_mcp.server:main"
+
+[project.urls]
+Repository = "https://github.com/Marlon-Trujillo-Jaramillo/shotlog-mcp"
+
+[dependency-groups]
+dev = ["pytest>=8"]
+
+[build-system]
+requires = ["hatchling>=1.26"]
+build-backend = "hatchling.build"
