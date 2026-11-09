@@ -14,8 +14,11 @@ mcp = FastMCP("shotlog")
 store = Store()
 
 
+_NOT_MAC = {"error": "Window capture needs macOS. Other tools (captions, remote pull, report) still work."}
+
+
 def _windows() -> list[dict]:
-    import Quartz  # macOS only; imported lazily so the store stays portable
+    import Quartz  # macOS only; imported lazily so the server starts anywhere
 
     opts = Quartz.kCGWindowListOptionOnScreenOnly | Quartz.kCGWindowListExcludeDesktopElements
     out = []
@@ -37,6 +40,8 @@ def _windows() -> list[dict]:
 @mcp.tool()
 def list_windows() -> list[dict]:
     """List visible windows (id, app, title, size). The first one is the front-most."""
+    if sys.platform != "darwin":
+        return [_NOT_MAC]
     return _windows()
 
 
@@ -55,6 +60,8 @@ def save_screenshot(
     - app / title_contains: pick the window (e.g. app="Terminal"). Empty = front-most window.
     - activity / command / result: caption stored in the manifest and used by export_report.
     """
+    if sys.platform != "darwin":
+        return _NOT_MAC
     wins = _windows()
     if app:
         wins = [w for w in wins if app.lower() in w["app"].lower()]
@@ -139,8 +146,6 @@ def export_report(title: str = "Screenshots") -> dict:
 
 
 def main() -> None:
-    if sys.platform != "darwin":
-        sys.exit("shotlog-mcp captures windows with macOS APIs and only runs on macOS.")
     mcp.run()
 
 
