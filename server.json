@@ -7,12 +7,12 @@
     "url": "https://github.com/Marlon-Trujillo-Jaramillo/shotlog-mcp",
     "source": "github"
   },
-  "version": "0.1.0",
+  "version": "0.1.1",
   "packages": [
     {
       "registryType": "pypi",
       "identifier": "shotlog-mcp",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "transport": {
         "type": "stdio"
       },

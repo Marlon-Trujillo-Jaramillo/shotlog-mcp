@@ -1,6 +1,6 @@
 [project]
 name = "shotlog-mcp"
-version = "0.1.0"
+version = "0.1.1"
 description = "MCP server that captures macOS windows into a numbered, captioned evidence log for lab reports, QA and docs."
 readme = "README.md"
 license = "MIT"
