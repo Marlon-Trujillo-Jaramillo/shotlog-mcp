@@ -14,7 +14,7 @@ classifiers = [
   "Topic :: Multimedia :: Graphics :: Capture :: Screen Capture",
 ]
 dependencies = [
-  "mcp>=1.2,<2",
+  "mcp>=1.2,<3",
   "pyobjc-framework-Quartz; sys_platform == 'darwin'",
 ]
 
