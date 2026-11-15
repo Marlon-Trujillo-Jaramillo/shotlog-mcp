@@ -7,6 +7,10 @@ updates:
     groups:
       python:
         patterns: ["*"]
+    # Major versions of libraries are planned on purpose (breaking changes), not merged weekly.
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: github-actions
     directory: /

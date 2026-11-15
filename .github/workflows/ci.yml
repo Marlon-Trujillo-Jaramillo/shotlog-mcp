@@ -28,17 +28,4 @@ jobs:
       - run: uv build
       - run: docker build -t shotlog-mcp .
       - name: MCP handshake + tools/list over stdio
-        run: |
-          printf '%s\n' \
-            '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"ci","version":"1"}}}' \
-            '{"jsonrpc":"2.0","method":"notifications/initialized"}' \
-            '{"jsonrpc":"2.0","id":2,"method":"tools/list"}' \
-            | timeout 20 docker run -i --rm shotlog-mcp > out.jsonl || true
-          python3 -c "
-          import json
-          msgs = [json.loads(l) for l in open('out.jsonl') if l.strip()]
-          tools = next(m['result']['tools'] for m in msgs if m.get('id') == 2)
-          names = sorted(t['name'] for t in tools)
-          print('tools:', names)
-          assert len(names) == 6, names
-          "
+        run: python3 .github/scripts/mcp_smoke.py 6 docker run -i --rm shotlog-mcp
