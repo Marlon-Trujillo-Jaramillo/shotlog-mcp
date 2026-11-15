@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    name: Tests (Python ${{ matrix.python }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: ${{ matrix.python }}
+      - run: uv run --group dev pytest -q
+
+  build:
+    name: Package builds and the server answers MCP introspection (Docker)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv build
+      - run: docker build -t shotlog-mcp .
+      - name: MCP handshake + tools/list over stdio
+        run: |
+          printf '%s\n' \
+            '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"ci","version":"1"}}}' \
+            '{"jsonrpc":"2.0","method":"notifications/initialized"}' \
+            '{"jsonrpc":"2.0","id":2,"method":"tools/list"}' \
+            | timeout 20 docker run -i --rm shotlog-mcp > out.jsonl || true
+          python3 -c "
+          import json
+          msgs = [json.loads(l) for l in open('out.jsonl') if l.strip()]
+          tools = next(m['result']['tools'] for m in msgs if m.get('id') == 2)
+          names = sorted(t['name'] for t in tools)
+          print('tools:', names)
+          assert len(names) == 6, names
+          "

@@ -6,3 +6,4 @@ dist/
 *.png
 manifest*.json
 report.md
+.DS_Store
